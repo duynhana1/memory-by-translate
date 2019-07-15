@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import "./styles.css";
+import { app, db } from "./firebase";
+console.log(app.name);
+console.log(db);
 
 function App() {
   return (
