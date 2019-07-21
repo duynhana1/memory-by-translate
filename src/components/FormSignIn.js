@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import * as firebase from "firebase";
-// import { Button } from "@blueprintjs/core";
+import app from "../firebase";
+import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -23,7 +23,7 @@ export default () => {
       onSubmit={({ email, password }, actions) => {
         // alert("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
         console.log("submitting");
-        firebase
+        app
           .auth()
           .signInWithEmailAndPassword(email, password)
           .catch(function(error) {
@@ -40,32 +40,30 @@ export default () => {
             }
           });
       }}
-      render={({ errors, status, touched }) => (
+      render={({ errors, touched }) => (
         <Form>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+          <FormGroup label="Email" labelFor="email" inline={true}>
             <Field
               name="email"
               type="text"
-              className={
-                "form-control" +
-                (errors.email && touched.email ? " is-invalid" : "")
-              }
+              id="email"
+              render={({ field }) => <InputGroup {...field} />}
+              intent={errors.email && touched.email ? "danger" : "none"}
             />
             <ErrorMessage
               name="email"
               component="div"
               className="invalid-feedback"
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          </FormGroup>
+          <FormGroup label="Password" labelFor="email" inline={true}>
             <Field
               name="password"
+              id="password"
               type="password"
+              render={({ field }) => <InputGroup {...field} />}
               className={
-                "form-control" +
-                (errors.password && touched.password ? " is-invalid" : "")
+                errors.password && touched.password ? " is-invalid" : ""
               }
             />
             <ErrorMessage
@@ -73,13 +71,13 @@ export default () => {
               component="div"
               className="invalid-feedback"
             />
-          </div>
+          </FormGroup>
           {unknownError && <div>{unknownError}</div>}
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+            <Button type="submit" className="btn btn-primary mr-2">
               Sign In
-            </button>
+            </Button>
             {/* <button type="reset" className="btn btn-secondary">
               Reset
             </button> */}
