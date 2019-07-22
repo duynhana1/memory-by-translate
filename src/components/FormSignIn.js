@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import app from "../firebase";
-import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import app from "../firebaseApp";
+import { Button, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
+import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 
 export default () => {
@@ -42,40 +42,65 @@ export default () => {
       }}
       render={({ errors, touched }) => (
         <Form>
-          <FormGroup label="Email" labelFor="email" inline={true}>
+          <FormGroup
+            label="Email"
+            helperText={touched.email && errors.email}
+            labelFor="email"
+            intent={errors.email && touched.email ? Intent.DANGER : Intent.NONE}
+            inline={true}
+          >
             <Field
               name="email"
               type="text"
               id="email"
-              render={({ field }) => <InputGroup {...field} />}
-              intent={errors.email && touched.email ? "danger" : "none"}
-            />
-            <ErrorMessage
-              name="email"
-              component="div"
-              className="invalid-feedback"
+              render={({ field, form, ...props }) => (
+                <InputGroup
+                  {...field}
+                  {...props}
+                  intent={
+                    errors.email && touched.email ? Intent.DANGER : Intent.NONE
+                  }
+                />
+              )}
             />
           </FormGroup>
-          <FormGroup label="Password" labelFor="email" inline={true}>
+          <FormGroup
+            label="Password"
+            helperText={touched.password && errors.password}
+            labelFor="password"
+            intent={
+              errors.password && touched.password ? Intent.DANGER : Intent.NONE
+            }
+            inline={true}
+          >
             <Field
               name="password"
               id="password"
               type="password"
-              render={({ field }) => <InputGroup {...field} />}
+              render={({ field, form, ...props }) => (
+                <InputGroup
+                  {...field}
+                  {...props}
+                  intent={
+                    errors.password && touched.password
+                      ? Intent.DANGER
+                      : Intent.NONE
+                  }
+                />
+              )}
               className={
                 errors.password && touched.password ? " is-invalid" : ""
               }
-            />
-            <ErrorMessage
-              name="password"
-              component="div"
-              className="invalid-feedback"
             />
           </FormGroup>
           {unknownError && <div>{unknownError}</div>}
 
           <div className="form-group">
-            <Button type="submit" className="btn btn-primary mr-2">
+            <Button
+              type="submit"
+              intent={Intent.PRIMARY}
+              className="btn btn-primary mr-2"
+            >
               Sign In
             </Button>
             {/* <button type="reset" className="btn btn-secondary">
